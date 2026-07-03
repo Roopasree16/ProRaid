@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="font-weight: 800;">Predictive Analytics</h2>
+    </div>
+
+    <!-- Section 1: Raid Success Predictor (Standalone Module) -->
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="premium-card">
+                <h4 class="fw-bold mb-4 text-center"><i class="fa-solid fa-crosshairs me-2 text-danger"></i>Raid Success Predictor</h4>
+                <p class="text-center text-muted small mb-4">Simulate game scenarios to calculate raid success probability based on historical Kabaddi patterns.</p>
+                
+                <div class="row g-5">
+                    <!-- Left Column: Inputs -->
+                    <div class="col-md-5 border-end pe-md-4">
+                        <form id="predictorForm">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted small">Time Remaining (mins)</label>
+                                <input type="number" class="form-control" id="timeRemaining" value="5" min="1" max="40">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted small">Defenders Alive</label>
+                                <select class="form-select" id="defendersAlive">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4" selected>4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted small">Score Difference</label>
+                                <input type="number" class="form-control" id="scoreDiff" value="3" placeholder="(e.g. 5 for leading, -5 for trailing)">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-muted small">Raid Type</label>
+                                <select class="form-select" id="raidType">
+                                    <option value="Standard" selected>Standard</option>
+                                    <option value="Do-or-Die">Do-or-Die</option>
+                                    <option value="Bonus Attempt">Bonus Attempt</option>
+                                </select>
+                            </div>
+                            <button type="button" id="predictBtn" class="btn w-100 fw-bold py-3 fs-5 shadow-sm rounded-3" style="background-color: var(--primary); color: white;">Run Prediction</button>
+                        </form>
+                    </div>
+
+                    <!-- Right Column: Outputs -->
+                    <div class="col-md-7 ps-md-4 d-flex flex-column position-relative">
+                        <div id="loadingOverlay" style="display: none; position: absolute; inset: 0; background: rgba(255,253,248,0.9); z-index: 10; align-items: center; justify-content: center; border-radius: 10px;">
+                            <div class="text-center">
+                                <div class="spinner-border mb-3" style="width: 3rem; height: 3rem; color: var(--primary);" role="status"></div>
+                                <h5 class="fw-bold text-muted">Analyzing Match Context...</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row align-items-center mb-4 text-center">
+                            <div class="col-6 border-end">
+                                <div class="text-muted fw-bold text-uppercase small mb-2">Raid Success Probability</div>
+                                <h1 class="display-4 fw-bold mb-0" id="predictionResult" style="color: var(--primary);">&nbsp;</h1>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-muted fw-bold text-uppercase small mb-2">Confidence Level</div>
+                                <h1 class="display-4 fw-bold mb-0" id="confidenceLevel" style="color: var(--primary);">&nbsp;</h1>
+                            </div>
+                        </div>
+                        
+                        <div class="progress w-100 mb-4" style="height: 12px; border-radius: 10px; background-color: #E2E8F0;">
+                            <div id="predictionBar" class="progress-bar bg-secondary" role="progressbar" style="width: 0%;"></div>
+                        </div>
+                        
+                        <div class="insight-card p-4 flex-grow-1" style="border-left-color: var(--primary); background: rgba(249, 115, 22, 0.05);">
+                            <div class="small text-uppercase fw-bold mb-3" style="color: var(--primary);"><i class="fa-solid fa-list-check me-2"></i>Why This Prediction?</div>
+                            <ul id="predictionReasons" class="mb-0 text-dark" style="list-style-type: none; padding-left: 0; line-height: 1.8; font-size: 1.05rem; font-weight: 500;">
+                                <li class="text-muted">Awaiting prediction... Run the simulator to generate logic.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Handle Prediction Form
+    document.getElementById('predictBtn').addEventListener('click', function() {
+        const btn = this;
+        const overlay = document.getElementById('loadingOverlay');
+        const resObj = document.getElementById('predictionResult');
+        const barObj = document.getElementById('predictionBar');
+        const confObj = document.getElementById('confidenceLevel');
+        
+        const payload = {
+            time: document.getElementById('timeRemaining').value,
+            defenders: document.getElementById('defendersAlive').value,
+            score_diff: document.getElementById('scoreDiff').value,
+            raid_type: document.getElementById('raidType').value
+        };
+
+        btn.disabled = true;
+        overlay.style.display = 'flex';
+
+        fetch('/api/predict_raid', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Simulate slight delay for effect
+            setTimeout(() => {
+                resObj.innerText = data.probability + "%";
+                barObj.style.width = data.probability + "%";
+                
+                // Color bar based on probability
+                barObj.className = "progress-bar progress-bar-striped progress-bar-animated";
+                if(data.probability > 70) {
+                    barObj.classList.add('bg-success');
+                } else if(data.probability > 40) {
+                    barObj.classList.add('bg-warning');
+                } else {
+                    barObj.classList.add('bg-danger');
+                }
+
+                confObj.innerText = data.confidence;
+                
+                // Color confidence text
+                confObj.className = "display-4 fw-bold mb-0";
+                confObj.style.color = "var(--primary)";
+
+                const reasonsHtml = data.reasons.map(r => {
+                    // Check if reason is positive (✓) or negative/warning (⚠) to format text
+                    if (r.startsWith('⚠')) {
+                        return `<li class="mb-3 text-danger"><span class="fw-bold">${r}</span></li>`;
+                    }
+                    return `<li class="mb-3">${r}</li>`;
+                }).join('');
+                document.getElementById('predictionReasons').innerHTML = reasonsHtml;
+                
+                overlay.style.display = 'none';
+                btn.disabled = false;
+            }, 800);
+        })
+        .catch(err => {
+            console.error(err);
+            overlay.style.display = 'none';
+            btn.disabled = false;
+        });
+    });
+</script>
+{% endblock %}

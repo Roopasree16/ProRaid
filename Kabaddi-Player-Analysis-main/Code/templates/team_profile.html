@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-12">
+            <a href="/teams" class="btn btn-sm btn-outline-secondary rounded-pill mb-3"><i class="fa-solid fa-arrow-left me-2"></i>Back to Search</a>
+        </div>
+    </div>
+
+    <!-- Team Header -->
+    <div class="profile-header mb-4" style="background: linear-gradient(135deg, var(--card-bg) 0%, rgba(249, 115, 22, 0.05) 100%);">
+        <div class="profile-avatar" style="color: var(--primary);">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+            <h1 style="font-weight: 900; font-size: 3rem; margin-bottom: 0.5rem;">{{ team.team_name }}</h1>
+        </div>
+        <div class="ms-auto text-end d-none d-md-block">
+            <div class="kpi-value text-danger count-up" style="font-size: 3rem;" data-count="{{ (team.total_raid_points|int + team.total_tackle_points|int) }}">0</div>
+            <div class="text-muted fw-bold text-uppercase" style="letter-spacing: 1px;">Total Franchise Points</div>
+        </div>
+    </div>
+
+    <!-- Team Strength Analysis -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="premium-card insight-card" style="border-left-color: var(--primary); background: linear-gradient(135deg, var(--card-bg) 0%, rgba(249, 115, 22, 0.02) 100%);">
+                <h4 class="insight-title mb-4" style="color: var(--primary);"><i class="fa-solid fa-chart-simple me-2"></i>Strength Analysis</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between text-muted fw-bold small mb-1 text-uppercase">
+                                <span>Attack Rating</span>
+                                <span class="text-secondary">{{ team.attack_rating }}/100</span>
+                            </div>
+                            <div class="progress" style="height: 12px;">
+                                <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ team.attack_rating }}%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-muted text-uppercase fw-bold small mb-1">Core Strength</div>
+                            <div class="fs-5 fw-bold text-success"><i class="fa-solid fa-check me-2"></i>{{ team.strength }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between text-muted fw-bold small mb-1 text-uppercase">
+                                <span>Defense Rating</span>
+                                <span class="text-neutral">{{ team.defense_rating }}/100</span>
+                            </div>
+                            <div class="progress" style="height: 12px;">
+                                <div class="progress-bar bg-neutral" role="progressbar" style="width: {{ team.defense_rating }}%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-muted text-uppercase fw-bold small mb-1">Primary Weakness</div>
+                            <div class="fs-5 fw-bold text-danger"><i class="fa-solid fa-xmark me-2"></i>{{ team.weakness }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <h3 class="mb-4" style="font-weight: 800;"><i class="fa-solid fa-chart-line me-2 text-primary"></i>Performance Overview</h3>
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-bolt text-primary"></i></div>
+                <div class="kpi-title">Total Raid Points</div>
+                <div class="kpi-value text-danger count-up" data-count="{{ team.total_raid_points|int }}">0</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-bullseye text-primary"></i></div>
+                <div class="kpi-title">Raid Success Rate</div>
+                <div class="kpi-value text-danger">{{ "%.1f"|format(team.raid_success_rate) }}%</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-shield text-primary"></i></div>
+                <div class="kpi-title">Total Tackle Points</div>
+                <div class="kpi-value text-danger count-up" data-count="{{ team.total_tackle_points|int }}">0</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-lock text-primary"></i></div>
+                <div class="kpi-title">Tackle Success Rate</div>
+                <div class="kpi-value text-danger">{{ "%.1f"|format(team.tackle_success_rate) }}%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Leaders -->
+    <h3 class="mb-4" style="font-weight: 800;">Team Leaders</h3>
+    <div class="row mb-5">
+        {% if top_raider %}
+        <div class="col-md-3 mb-4">
+            <a href="/player/{{ top_raider.player_name }}" class="text-decoration-none text-dark">
+                <div class="premium-card text-center h-100">
+                    <div class="text-muted text-uppercase fw-bold small mb-3">Best Raider</div>
+                    <div class="fs-4 fw-bold mb-2">{{ top_raider.player_name }}</div>
+                    <div class="badge-tactical text-primary mb-3">{{ top_raider.tactical_class }}</div>
+                    <div class="fs-3 fw-bold text-danger">{{ top_raider.player_raid_points_total|int }} <span class="fs-6 text-muted">Pts</span></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if top_defender %}
+        <div class="col-md-3 mb-4">
+            <a href="/player/{{ top_defender.player_name }}" class="text-decoration-none text-dark">
+                <div class="premium-card text-center h-100">
+                    <div class="text-muted text-uppercase fw-bold small mb-3">Best Defender</div>
+                    <div class="fs-4 fw-bold mb-2">{{ top_defender.player_name }}</div>
+                    <div class="badge-tactical text-primary mb-3">{{ top_defender.tactical_class }}</div>
+                    <div class="fs-3 fw-bold text-danger">{{ top_defender.player_tackle_points_total|int }} <span class="fs-6 text-muted">Pts</span></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if most_active %}
+        <div class="col-md-3 mb-4">
+            <a href="/player/{{ most_active.player_name }}" class="text-decoration-none text-dark">
+                <div class="premium-card text-center h-100">
+                    <div class="text-muted text-uppercase fw-bold small mb-3">Most Active Raider</div>
+                    <div class="fs-4 fw-bold mb-2">{{ most_active.player_name }}</div>
+                    <div class="badge-tactical text-primary mb-3">{{ most_active.tactical_class }}</div>
+                    <div class="fs-3 fw-bold text-danger">{{ most_active.player_raids_total|int }} <span class="fs-6 text-muted">Raids</span></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if most_succ_def %}
+        <div class="col-md-3 mb-4">
+            <a href="/player/{{ most_succ_def.player_name }}" class="text-decoration-none text-dark">
+                <div class="premium-card text-center h-100">
+                    <div class="text-muted text-uppercase fw-bold small mb-3">Most Efficient Defender</div>
+                    <div class="fs-4 fw-bold mb-2">{{ most_succ_def.player_name }}</div>
+                    <div class="badge-tactical text-primary mb-3">{{ most_succ_def.tactical_class }}</div>
+                    <div class="fs-3 fw-bold text-danger">{{ "%.1f"|format(most_succ_def.tackle_success_rate) }}% <span class="fs-6 text-muted">Succ</span></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

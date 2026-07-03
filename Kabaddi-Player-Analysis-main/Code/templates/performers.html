@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4" style="font-weight: 800;">League Top Performers</h2>
+    
+    <style>
+        .custom-tabs .nav-link {
+            color: #1E293B;
+            font-weight: 600;
+            border-radius: 0;
+            border-bottom: 2px solid transparent;
+            padding: 0.5rem 1rem;
+            background: transparent !important;
+            margin-right: 1rem;
+        }
+        .custom-tabs .nav-link:hover {
+            color: var(--primary);
+        }
+        .custom-tabs .nav-link.active {
+            color: var(--primary) !important;
+            border-bottom: 2px solid var(--primary);
+        }
+    </style>
+
+    <ul class="nav custom-tabs mb-4" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-raiders-tab" data-bs-toggle="pill" data-bs-target="#pills-raiders" type="button" role="tab">Top Raiders</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-defenders-tab" data-bs-toggle="pill" data-bs-target="#pills-defenders" type="button" role="tab">Top Defenders</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-allrounders-tab" data-bs-toggle="pill" data-bs-target="#pills-allrounders" type="button" role="tab">Top All-Rounders</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-teams-tab" data-bs-toggle="pill" data-bs-target="#pills-teams" type="button" role="tab">Team Rankings</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="pills-tabContent">
+        <!-- Raiders Tab -->
+        <div class="tab-pane fade show active" id="pills-raiders" role="tabpanel">
+            <div class="premium-card">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Total Raid Pts</th>
+                            <th>Success Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in raiders %}
+                        <tr onclick="window.location.href='/player/{{ p.player_name }}'" style="cursor: pointer;">
+                            <td><strong>#{{ loop.index }}</strong></td>
+                            <td>{{ p.player_name }}</td>
+                            <td><span class="badge-team">{{ p.team_name }}</span></td>
+                            <td class="fw-bold">{{ p.player_raid_points_total|int }}</td>
+                            <td>{{ "%.1f"|format(p.raid_success_rate) }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Defenders Tab -->
+        <div class="tab-pane fade" id="pills-defenders" role="tabpanel">
+            <div class="premium-card">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Total Tackle Pts</th>
+                            <th>Success Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in defenders %}
+                        <tr onclick="window.location.href='/player/{{ p.player_name }}'" style="cursor: pointer;">
+                            <td><strong>#{{ loop.index }}</strong></td>
+                            <td>{{ p.player_name }}</td>
+                            <td><span class="badge-team">{{ p.team_name }}</span></td>
+                            <td class="fw-bold">{{ p.player_tackle_points_total|int }}</td>
+                            <td>{{ "%.1f"|format(p.tackle_success_rate) }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- All Rounders Tab -->
+        <div class="tab-pane fade" id="pills-allrounders" role="tabpanel">
+            <div class="premium-card">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Raid Pts</th>
+                            <th>Tackle Pts</th>
+                            <th>Total Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in allrounders %}
+                        <tr onclick="window.location.href='/player/{{ p.player_name }}'" style="cursor: pointer;">
+                            <td><strong>#{{ loop.index }}</strong></td>
+                            <td>{{ p.player_name }}</td>
+                            <td><span class="badge-team">{{ p.team_name }}</span></td>
+                            <td>{{ p.player_raid_points_total|int }}</td>
+                            <td>{{ p.player_tackle_points_total|int }}</td>
+                            <td class="fw-bold">{{ p.total_impact_points|int }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Team Rankings Tab -->
+        <div class="tab-pane fade" id="pills-teams" role="tabpanel">
+            <div class="premium-card">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Team</th>
+                            <th>Total Raids</th>
+                            <th>Total Raid Pts</th>
+                            <th>Total Tackles</th>
+                            <th>Total Tackle Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in teams %}
+                        <tr onclick="window.location.href='/team/{{ t.team_name }}'" style="cursor: pointer;">
+                            <td><strong>#{{ loop.index }}</strong></td>
+                            <td class="fw-bold">{{ t.team_name }}</td>
+                            <td>{{ t.total_raids|int }}</td>
+                            <td class="fw-bold">{{ t.total_raid_points|int }}</td>
+                            <td>{{ t.total_tackles|int }}</td>
+                            <td class="fw-bold">{{ t.total_tackle_points|int }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

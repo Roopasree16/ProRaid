@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-5 mb-5 position-relative" style="overflow: hidden; background: radial-gradient(circle at center, rgba(249,115,22,0.08) 0%, rgba(248,244,236,0) 60%);">
+        <h1 class="display-3 fw-bold mb-3 animate-up" style="color: var(--primary);">Welcome to ProRaid</h1>
+        <p class="lead text-muted mx-auto animate-up" style="max-width: 700px; animation-delay: 0.1s;">
+            Discover elite raiders, dominant defenders, team strengths, and match-winning patterns through advanced Kabaddi analytics.
+        </p>
+
+    </div>
+
+    <div class="container">
+        <!-- Trending This Season -->
+        <h3 class="mb-4 fw-bold animate-up text-center" style="animation-delay: 0.3s;">Trending This Season</h3>
+        <div class="row mb-5 justify-content-center">
+            <div class="col-md-4 mb-4 animate-up" style="animation-delay: 0.4s;">
+                <a href="/player/{{ insights.raider.player_name }}" class="text-decoration-none text-dark">
+                    <div class="premium-card text-center h-100 d-flex flex-column">
+                        <div class="text-muted text-uppercase fw-bold small mb-3"><i class="fa-solid fa-bolt text-primary me-2"></i>Top Raider</div>
+                        <h4 class="fw-bold mb-1">{{ insights.raider.player_name }}</h4>
+                        <div class="small text-muted mb-3">{{ insights.raider.team_name }}</div>
+                        <div class="mt-auto">
+                            <div class="fs-3 fw-bold text-danger count-up" data-count="{{ insights.raider.player_raid_points_total|int }}">0</div>
+                            <div class="small text-muted text-uppercase fw-bold">Raid Points</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-4 animate-up" style="animation-delay: 0.5s;">
+                <a href="/player/{{ insights.defender.player_name }}" class="text-decoration-none text-dark">
+                    <div class="premium-card text-center h-100 d-flex flex-column">
+                        <div class="text-muted text-uppercase fw-bold small mb-3"><i class="fa-solid fa-shield text-primary me-2"></i>Top Defender</div>
+                        <h4 class="fw-bold mb-1">{{ insights.defender.player_name }}</h4>
+                        <div class="small text-muted mb-3">{{ insights.defender.team_name }}</div>
+                        <div class="mt-auto">
+                            <div class="fs-3 fw-bold text-danger count-up" data-count="{{ insights.defender.player_tackle_points_total|int }}">0</div>
+                            <div class="small text-muted text-uppercase fw-bold">Tackle Points</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 mb-4 animate-up" style="animation-delay: 0.6s;">
+                <a href="/team/{{ insights.team.team_name }}" class="text-decoration-none text-dark">
+                    <div class="premium-card text-center h-100 d-flex flex-column">
+                        <div class="text-muted text-uppercase fw-bold small mb-3"><i class="fa-solid fa-trophy text-primary me-2"></i>Strongest Franchise</div>
+                        <h4 class="fw-bold mb-1">{{ insights.team.team_name }}</h4>
+                        <div class="small text-success fw-bold mb-3"><i class="fa-solid fa-check me-1"></i>{{ insights.team.strength|default('Balanced') }}</div>
+                        <div class="mt-auto">
+                            <div class="fs-3 fw-bold text-danger count-up" data-count="{{ (insights.team.total_raid_points + insights.team.total_tackle_points)|int }}">0</div>
+                            <div class="small text-muted text-uppercase fw-bold">Total Points</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Featured Statistics -->
+        <h3 class="mb-4 fw-bold animate-up">Featured Statistics</h3>
+        <div class="row mb-5">
+            <div class="col-md-3 mb-3 animate-up">
+                <div class="premium-card text-center h-100 m-0">
+                    <div class="kpi-icon"><i class="fa-solid fa-users text-primary"></i></div>
+                    <div class="kpi-title">Total Players</div>
+                    <div class="kpi-value text-danger count-up" data-count="{{ kpis.players }}">0</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 animate-up">
+                <div class="premium-card text-center h-100 m-0">
+                    <div class="kpi-icon"><i class="fa-solid fa-shield-halved text-primary"></i></div>
+                    <div class="kpi-title">Total Teams</div>
+                    <div class="kpi-value text-danger count-up" data-count="{{ kpis.teams }}">0</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 animate-up">
+                <div class="premium-card text-center h-100 m-0">
+                    <div class="kpi-icon"><i class="fa-solid fa-clipboard-list text-primary"></i></div>
+                    <div class="kpi-title">Total Matches</div>
+                    <div class="kpi-value text-danger count-up" data-count="{{ kpis.matches }}">0</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 animate-up">
+                <div class="premium-card text-center h-100 m-0">
+                    <div class="kpi-icon"><i class="fa-solid fa-bolt text-primary"></i></div>
+                    <div class="kpi-title">Highest Raid Pts</div>
+                    <div class="kpi-value text-danger count-up" data-count="{{ kpis.highest_raid_pts }}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- League Leaders / Hall of Impact -->
+        <h3 class="mb-4 fw-bold animate-up mt-5">Hall of Impact</h3>
+        <div class="row mb-5">
+            <div class="col-md-6 mb-4 animate-up">
+                <a href="/player/{{ insights.consistent.player_name }}" class="text-decoration-none text-dark">
+                    <div class="premium-card h-100 d-flex flex-column p-4" style="border-left: 4px solid var(--primary);">
+                        <h5 class="text-muted text-uppercase fw-bold small mb-3">Most Consistent All-Rounder</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h3 class="fw-bold mb-1">{{ insights.consistent.player_name }}</h3>
+                                <div class="badge-team">{{ insights.consistent.team_name }}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-2 fw-bold text-danger count-up" data-count="{{ (insights.consistent.player_raid_points_total + insights.consistent.player_tackle_points_total)|int }}">0</div>
+                                <div class="small text-muted text-uppercase fw-bold">Total Impact</div>
+                            </div>
+                        </div>
+                        <div class="mt-auto row text-center" style="border-top: 1px solid #E2E8F0; padding-top: 15px;">
+                            <div class="col-6" style="border-right: 1px solid #E2E8F0;">
+                                <div class="small text-muted">Raid Success</div>
+                                <div class="fw-bold text-danger">{{ "%.1f"|format(insights.consistent.raid_success_rate|default(0)) }}%</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="small text-muted">Tackle Success</div>
+                                <div class="fw-bold text-danger">{{ "%.1f"|format(insights.consistent.tackle_success_rate|default(0)) }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 mb-4 animate-up">
+                <a href="/player/{{ insights.raider.player_name }}" class="text-decoration-none text-dark">
+                    <div class="premium-card h-100 d-flex flex-column p-4" style="border-left: 4px solid var(--primary);">
+                        <h5 class="text-muted text-uppercase fw-bold small mb-3">Ultimate Attacker</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h3 class="fw-bold mb-1">{{ insights.raider.player_name }}</h3>
+                                <div class="badge-team">{{ insights.raider.team_name }}</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-2 fw-bold text-danger count-up" data-count="{{ insights.raider.player_raid_points_total|int }}">0</div>
+                                <div class="small text-muted text-uppercase fw-bold">Raid Points</div>
+                            </div>
+                        </div>
+                        <div class="mt-auto row text-center" style="border-top: 1px solid #E2E8F0; padding-top: 15px;">
+                            <div class="col-4" style="border-right: 1px solid #E2E8F0;">
+                                <div class="small text-muted">Successful</div>
+                                <div class="fw-bold text-danger">{{ insights.raider.player_raids_successful|int }}</div>
+                            </div>
+                            <div class="col-4" style="border-right: 1px solid #E2E8F0;">
+                                <div class="small text-muted">Unsuccessful</div>
+                                <div class="fw-bold text-danger">{{ insights.raider.player_raids_unsuccessful|int }}</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="small text-muted">Rate</div>
+                                <div class="fw-bold text-danger">{{ "%.1f"|format(insights.raider.raid_success_rate|default(0)) }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

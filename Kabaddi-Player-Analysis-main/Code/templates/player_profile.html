@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-12">
+            <a href="/players" class="btn btn-sm btn-outline-secondary rounded-pill mb-3"><i
+                    class="fa-solid fa-arrow-left me-2"></i>Back to Search</a>
+        </div>
+    </div>
+
+    <!-- Sports Profile Header -->
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <div>
+            <h1 style="font-weight: 900; font-size: 3rem; margin-bottom: 0.5rem;">{{ player.player_name }}</h1>
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                <span class="badge-team text-primary"><i class="fa-solid fa-shield-halved me-1"></i> {{ player.team_name
+                    }}</span>
+                <span class="badge-tactical text-primary"><i class="fa-solid fa-brain me-1"></i> {{
+                    player.tactical_class }}</span>
+            </div>
+        </div>
+        <div class="ms-auto text-end d-none d-md-block">
+            <div class="kpi-value text-danger" style="font-size: 3rem;">{{ (player.player_raid_points_total +
+                player.player_tackle_points_total)|int }}</div>
+            <div class="text-muted fw-bold text-uppercase" style="letter-spacing: 1px;">Total Impact Points</div>
+        </div>
+    </div>
+
+    <h3 class="mb-4" style="font-weight: 800;"><i class="fa-solid fa-chart-line me-2 text-primary"></i>Performance
+        Overview</h3>
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-person-running text-primary"></i></div>
+                <div class="kpi-title">Total Raids</div>
+                <div class="kpi-value text-danger">{{ player.player_raids_total|int }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-bolt text-primary"></i></div>
+                <div class="kpi-title">Raid Points</div>
+                <div class="kpi-value text-danger">{{ player.player_raid_points_total|int }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-hand-fist text-primary"></i></div>
+                <div class="kpi-title">Total Tackles</div>
+                <div class="kpi-value text-danger">{{ player.player_tackles_total|int }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="premium-card text-center h-100 m-0">
+                <div class="kpi-icon"><i class="fa-solid fa-shield text-primary"></i></div>
+                <div class="kpi-title">Tackle Points</div>
+                <div class="kpi-value text-danger">{{ player.player_tackle_points_total|int }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        {% if player.player_raids_total > 0 %}
+        <div class="col-md-6 mb-4">
+            <style>
+                .analysis-card {
+                    transition: all 0.3s ease;
+                }
+
+                .analysis-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+                }
+            </style>
+            <div class="premium-card analysis-card h-100">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-bolt me-2 text-primary"></i>Raid Analysis</h4>
+                <div class="d-flex flex-wrap align-items-center" style="gap: 2rem;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <div id="raidChart"></div>
+                    </div>
+                    <div
+                        style="flex: 1; min-width: 200px; display: flex; flex-direction: column; justify-content: center;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Successful Raids</span>
+                                <span class="fw-bold text-dark">{{ player.player_raids_successful|int }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Unsuccessful Raids</span>
+                                <span class="fw-bold text-dark">{{ player.player_raids_unsuccessful|int }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Success Rate</span>
+                                <span class="fw-bold text-dark">{{ "%.1f"|format(player.raid_success_rate) }}%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if player.player_tackles_total > 0 %}
+        <div class="col-md-6 mb-4">
+            <div class="premium-card analysis-card h-100">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-shield me-2 text-primary"></i>Tackle Analysis</h4>
+                <div class="d-flex flex-wrap align-items-center" style="gap: 2rem;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <div id="tackleChart"></div>
+                    </div>
+                    <div
+                        style="flex: 1; min-width: 200px; display: flex; flex-direction: column; justify-content: center;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Successful Tackles</span>
+                                <span class="fw-bold text-dark">{{ player.player_tackles_successful|int }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Unsuccessful Tackles</span>
+                                <span class="fw-bold text-dark">{{ player.player_tackles_unsuccessful|int }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                style="background: transparent;">
+                                <span class="text-muted">Success Rate</span>
+                                <span class="fw-bold text-dark">{{ "%.1f"|format(player.tackle_success_rate) }}%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Tactical Interpretation Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="premium-card insight-card"
+                style="border-left-color: var(--primary); background: linear-gradient(135deg, var(--card-bg) 0%, rgba(249, 115, 22, 0.05) 100%);">
+                <h4 class="insight-title mb-4" style="color: var(--primary);">Tactical Intelligence Report</h4>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-1">Playstyle Classification</h6>
+                            <div class="fs-4 fw-bold">{{ interpretation.style|default('Unclassified') }}</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Contribution Split</h6>
+                            <div class="d-flex justify-content-between small mb-1 fw-bold">
+                                <span class="text-secondary">Attack ({{ "%.0f"|format(player.attack_contrib) }}%)</span>
+                                <span class="text-neutral">Defense ({{ "%.0f"|format(player.defense_contrib) }}%)</span>
+                            </div>
+                            <div class="progress" style="height: 12px;">
+                                <div class="progress-bar bg-secondary" role="progressbar"
+                                    style="width: {{ player.attack_contrib }}%;"></div>
+                                <div class="progress-bar bg-neutral" role="progressbar"
+                                    style="width: {{ player.defense_contrib }}%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Coach's Recommendation</h6>
+                            <p class="mb-0">{{ interpretation.recommendation|default('No specific recommendation
+                                available.') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            <h6 class="text-success text-uppercase fw-bold mb-2"><i
+                                    class="fa-solid fa-check-circle me-1"></i> Key Strengths</h6>
+                            <ul class="list-unstyled mb-0">
+                                {% for strength in interpretation.strengths|default([]) %}
+                                <li class="mb-1"><i class="fa-solid fa-plus text-success me-2 small"></i>{{ strength }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h6 class="text-danger text-uppercase fw-bold mb-2"><i
+                                    class="fa-solid fa-circle-xmark me-1"></i> Vulnerabilities</h6>
+                            <ul class="list-unstyled mb-0">
+                                {% for weakness in interpretation.weaknesses|default([]) %}
+                                <li class="mb-1"><i class="fa-solid fa-minus text-danger me-2 small"></i>{{ weakness }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    {% if player.player_raids_total > 0 %}
+    var raidData = {{ raid_json | safe }};
+    Plotly.newPlot('raidChart', raidData.data, raidData.layout, { responsive: true });
+    {% endif %}
+
+    {% if player.player_tackles_total > 0 %}
+    var tackleData = {{ tackle_json | safe }};
+    Plotly.newPlot('tackleChart', tackleData.data, tackleData.layout, { responsive: true });
+    {% endif %}
+</script>
+{% endblock %}

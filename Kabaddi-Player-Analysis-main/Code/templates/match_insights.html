@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4" style="font-weight: 800;">Match Insights & Analytics</h2>
+    
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-10">
+            <div class="premium-card">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-fire me-2 text-primary"></i>Top Scoring Teams</h4>
+                <div class="row">
+                    {% for t in top_teams %}
+                    <div class="col-md-3 col-6 text-center mb-4">
+                        <div class="fw-bold fs-5 mb-1">{{ t.team_name }}</div>
+                        <div class="kpi-value fs-3 text-primary">{{ t.total_raid_points|int }}</div>
+                        <div class="small text-muted text-uppercase fw-bold">Raid Points</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Highest Scoring Matches -->
+        <div class="col-md-4 mb-4">
+            <div class="premium-card h-100">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-arrow-up-right-dots me-2 text-success"></i>Highest Scoring</h4>
+                {% for m in highest[:3] %}
+                <div class="insight-card p-3 mb-3" style="border-left-color: #10B981;">
+                    <div class="fw-bold mb-1">{{ m.result }}</div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>{% if 'Match' in m.match_number|string %}{{ m.match_number }}{% else %}Match {{ m.match_number }}{% endif %}</span>
+                        <strong>{{ m.total_match_points|int }} Pts</strong>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Closest Matches -->
+        <div class="col-md-4 mb-4">
+            <div class="premium-card h-100">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-compress me-2 text-warning"></i>Closest Matches</h4>
+                {% for m in closest[:3] %}
+                <div class="insight-card p-3 mb-3" style="border-left-color: #F59E0B;">
+                    <div class="fw-bold mb-1">{{ m.result }}</div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>{% if 'Match' in m.match_number|string %}{{ m.match_number }}{% else %}Match {{ m.match_number }}{% endif %}</span>
+                        <strong>Diff: {{ m.point_difference|int }}</strong>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Biggest Winning Margin -->
+        <div class="col-md-4 mb-4">
+            <div class="premium-card h-100">
+                <h4 class="mb-4 fw-bold"><i class="fa-solid fa-maximize me-2 text-danger"></i>Biggest Margins</h4>
+                {% for m in biggest_margin[:3] %}
+                <div class="insight-card p-3 mb-3" style="border-left-color: #EF4444;">
+                    <div class="fw-bold mb-1">{{ m.result }}</div>
+                    <div class="d-flex justify-content-between text-muted small">
+                        <span>{% if 'Match' in m.match_number|string %}{{ m.match_number }}{% else %}Match {{ m.match_number }}{% endif %}</span>
+                        <strong>Margin: {{ m.point_difference|int }}</strong>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
