@@ -6,7 +6,7 @@ This project combines an interactive **Flask Web App** (with Plotly visualizatio
 
 ---
 
-##  Key Features
+## Key Features
 
 ### 1. Flask Web Application Dashboard
 * **Dynamic Home Dashboard:** Showcases real-time key performance indicators (KPIs) including total active players, teams, matches analyzed, and top-tier player awards (Best Raider, Best Defender, Consistent Performer).
@@ -24,40 +24,7 @@ This project combines an interactive **Flask Web App** (with Plotly visualizatio
 
 ---
 
-##  Project Directory Structure
-
-```text
-Kabaddi-Player-Analysis-main/
-├── .gitignore
-├── README.md                              # This root documentation file
-└── Kabaddi-Player-Analysis-main/          # Subdirectory containing codebase
-    ├── Code/                              # Backend app and dataset files
-    │   ├── app.py                         # Main Flask application
-    │   ├── kabaddi_player_impact_predictor_(complete).py  # Machine learning model pipeline
-    │   ├── requirements.txt               # Python package dependencies
-    │   ├── DS_players.csv                 # Raw player dataset
-    │   ├── DS_team.csv                    # Raw team dataset
-    │   ├── DS_match.csv                   # Raw match dataset
-    │   ├── DS_events.csv                  # Raw play-by-play events dataset
-    │   ├── templates/                     # Jinja2 HTML templates
-    │   │   ├── base.html                  # Global layout skeleton
-    │   │   ├── index.html                 # Homepage dashboard
-    │   │   ├── players.html               # Player search & directory
-    │   │   ├── player_profile.html        # Detailed player analytics page
-    │   │   ├── teams.html                 # Team list page
-    │   │   ├── team_profile.html          # Team detailed analysis page
-    │   │   ├── performers.html            # Top performers leaderboard
-    │   │   ├── match_insights.html        # Match-level analytics report
-    │   │   └── predictive_analytics.html  # Live raid simulation dashboard
-    │   └── static/                        # CSS styles, assets, and frontend Javascript
-    │       ├── css/
-    │       └── js/
-    └── Screenshot 2025-11-18 152640.png   # Dashboard UI preview screenshot
-```
-
----
-
-##  Technology Stack
+## Technology Stack
 
 * **Frontend:** HTML5, CSS3 (Vanilla design tokens, custom layout animations, modern typography), JavaScript (Vanilla ES6, Plotly.js for charts)
 * **Backend:** Flask, Python (>= 3.8)
@@ -65,7 +32,7 @@ Kabaddi-Player-Analysis-main/
 
 ---
 
-##  Installation & Getting Started
+## Installation & Getting Started
 
 ### Prerequisites
 * Python 3.8 or higher installed on your system.
@@ -83,7 +50,7 @@ Kabaddi-Player-Analysis-main/
 
 ---
 
-##  Usage
+## Usage
 
 ### 1. Running the Web Application
 To start the Flask development server, execute the following command:
