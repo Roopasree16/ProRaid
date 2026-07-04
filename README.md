@@ -6,7 +6,7 @@ This project combines an interactive **Flask Web App** (with Plotly visualizatio
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 ### 1. Flask Web Application Dashboard
 * **Dynamic Home Dashboard:** Showcases real-time key performance indicators (KPIs) including total active players, teams, matches analyzed, and top-tier player awards (Best Raider, Best Defender, Consistent Performer).
@@ -24,7 +24,7 @@ This project combines an interactive **Flask Web App** (with Plotly visualizatio
 
 ---
 
-## 📂 Project Directory Structure
+##  Project Directory Structure
 
 ```text
 Kabaddi-Player-Analysis-main/
@@ -57,7 +57,7 @@ Kabaddi-Player-Analysis-main/
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 * **Frontend:** HTML5, CSS3 (Vanilla design tokens, custom layout animations, modern typography), JavaScript (Vanilla ES6, Plotly.js for charts)
 * **Backend:** Flask, Python (>= 3.8)
@@ -65,7 +65,7 @@ Kabaddi-Player-Analysis-main/
 
 ---
 
-## ⚙️ Installation & Getting Started
+##  Installation & Getting Started
 
 ### Prerequisites
 * Python 3.8 or higher installed on your system.
@@ -83,7 +83,7 @@ Kabaddi-Player-Analysis-main/
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ### 1. Running the Web Application
 To start the Flask development server, execute the following command:
